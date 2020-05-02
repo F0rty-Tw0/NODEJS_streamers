@@ -27,10 +27,11 @@ mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
-mongoose.connect("mongodb+srv://kamacytpa:0291643430@influencersdb-0vr8w.mongodb.net/Streamers?retryWrites=true&w=majority");
+mongoose.connect(process.env.DATABASEURL);
 
+console.dir(process.env.DATABASE_URL)
 //Check if We have our Database connected
-mongoose.connection.on("connected", function () {
+mongoose.connection.on("connected", function () {c
     console.log("Database is connected");
 });
 
