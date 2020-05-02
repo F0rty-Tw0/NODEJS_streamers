@@ -1,0 +1,30 @@
+<!-- Including the Header -->
+<%- include("../partials/header") %>
+
+<!-- Bootstrap4 Container -->
+<div class="row">
+    <div class="container">
+        <h1 style="text-align: center;">Create a New Streamer</h1>
+        <!-- The from for adding streamers -->
+        <div style="width: 40%; margin: 30px auto;">
+            <form action="/streamers" method="POST">
+                <div class="form-group">
+                    <input class="form-control" type="text" name="name" placeholder="Streamer Name">
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="text" name="logo" placeholder="Streamer Logo URL">
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="text" name="description" placeholder="Description">
+                </div>
+                <button class="btn btn-lg  btn-block btn-primary">Create</button>
+            </form>
+            <a href="/streamers">Back</a>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Including the Footer -->
+<%- include("../partials/footer") %>

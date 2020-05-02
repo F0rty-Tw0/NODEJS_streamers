@@ -1,0 +1,23 @@
+.img-thumbnail img {
+    width: 100%;
+}
+.img-thumbnail .caption-full {
+    padding: 1.5em;
+}
+
+.img-thumbnail .caption-full p {
+    padding-top: 1.5em;
+}
+/* .img-thumbnail {
+    padding: 0;
+} */
+
+.deleteForm {
+    padding: 1%;
+    display: inline;
+    margin-left: 1%;
+}
+
+.editButton {
+    margin-right: 1%;
+}

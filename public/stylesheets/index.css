@@ -1,0 +1,85 @@
+body {
+    background-color: black;
+}
+
+.indexHeader {
+    z-index: 1;
+    position: relative;
+    text-align: center;
+    padding-top: 40vh;
+}
+
+.indexHeader h1 {
+    color: white;
+}
+
+.slideshow {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.slideshow li {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-size: cover;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    opacity: 0;
+    z-index: 0;
+    animation: imageAnimation 60s linear infinite;
+}
+
+.slideshow li:nth-child(1){
+    background-image: url("https://miro.medium.com/max/1000/1*WUao6DOVK37b09bPf2f1Tg.png") ;
+}
+.slideshow li:nth-child(2){
+    background-image: url("https://cdn.vox-cdn.com/thumbor/ORKXZ8oHkDhJa1QF8JSyehZ-rUk=/41x0:604x317/1600x900/cdn.vox-cdn.com/uploads/chorus_image/image/49822479/riot-games-esports.0.0.png") ;
+    animation-delay: 10s;
+}
+.slideshow li:nth-child(3){
+    background-image: url("https://i.pinimg.com/originals/5b/e0/01/5be001eddab589bf4cfed6a0e5b726a5.jpg") ;
+    animation-delay: 20s;
+}
+.slideshow li:nth-child(4){
+    background-image: url("https://miro.medium.com/max/3240/1*K327a6_rGSHp4uIkSgaMSg.jpeg") ;
+    animation-delay: 30s;
+}
+.slideshow li:nth-child(5){
+    background-image: url("https://assets.rockpapershotgun.com/images/2019/04/Twitch-Sings.png") ;
+    animation-delay: 40s;
+}
+.slideshow li:nth-child(6){
+    background-image: url("https://i.pinimg.com/originals/50/11/fd/5011fdf1a5d7e99e14e225fb5dc08edd.jpg") ;
+    animation-delay: 50s;
+}
+
+@keyframes imageAnimation {
+    0% {
+        opacity: 0;
+        animation-timing-function: ease-in ;
+    }
+    10% {
+        opacity: 1;
+        animation-timing-function: ease-out ;
+    }
+    20% {
+        opacity: 1;       
+    }
+    30% {
+        opacity: 0;
+    }
+}
+
+.no-cssanimation .slideshow li {
+    opacity: 1;
+}

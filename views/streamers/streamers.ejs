@@ -1,0 +1,43 @@
+<!-- Including the Header-->
+<%- include("../partials/header") %>
+
+<!-- Main container for Bootstrap4 -->
+<div class="container">
+    <!-- Main Header for a primary marketing message or call to action -->
+    <header class="jumbotron">
+        <!-- Main container for Jumbotron -->
+        <div class="container text-center">
+            <h1>Welcome to our Streamers Page</h1>
+            <p> View our Top Streamers all over the world</p>
+            <p>
+                <a class="btn btn-primary btn-lg" href="/streamers/new">Add new Streamer</a>
+            </p>
+        </div>
+    </header>
+
+    <!-- Content Header -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h3> Our top streamers</h3>
+        </div>
+    </div>
+
+    <div class="row text-center" style="display:flex; flex-wrap: wrap;">
+        <!-- Making an array of streamers based on name and image -->
+        <% streamers.forEach((streamer) =>{ %>
+        <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="img-thumbnail">
+                <img class="img-fluid"  src="<%= streamer.logo %>">
+                <div class="caption">
+                    <h4><%= streamer.name %></h4>
+                </div>
+                <p>
+                    <a href="/streamers/<%= streamer._id %>" class="btn btn-primary">More Info</a>
+                </p>
+            </div>
+        </div>
+        <% }); %>
+    </div>
+</div>
+<!-- Including the Footer-->
+<%- include("../partials/footer") %>
