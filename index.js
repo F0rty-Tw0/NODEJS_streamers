@@ -17,6 +17,9 @@ const express = require("express"),
     User = require("./models/user"),
     seedDB = require("./seeds");
 
+//Requiring Dotenv    
+require('dotenv').config();
+
 //Routes files locations
 const commentRoutes = require("./routes/comments"),
     streamersRoutes = require("./routes/streamers"),
@@ -27,11 +30,13 @@ mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
-mongoose.connect(process.env.DATABASEURL);
 
-console.dir(process.env.DATABASE_URL)
+const URL = process.env.DATABASE_URL;
+// mongoose.connect(process.env.DATABASEURL);
+mongoose.connect(URL);
+
 //Check if We have our Database connected
-mongoose.connection.on("connected", function () {c
+mongoose.connection.on("connected", function () {
     console.log("Database is connected");
 });
 
@@ -79,32 +84,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //Starting the server on Port 3000
-app.listen(process.env.PORT || 3000, process.env.IP, () => {
+app.listen(process.env.PORT, process.env.IP, () => {
     console.log("Our Secret Project Has Started!");
 });
