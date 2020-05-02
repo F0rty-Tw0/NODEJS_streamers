@@ -31,7 +31,7 @@ mongoose.connect(process.env.DATABASEURL);
 
 console.dir(process.env.DATABASE_URL)
 //Check if We have our Database connected
-mongoose.connection.on("connected", function () {c
+mongoose.connection.on("connected", function () {
     console.log("Database is connected");
 });
 
