@@ -13,7 +13,12 @@ router.get("/", (request, response) => {
 
 //Show the Register form
 router.get("/register", (request, response) => {
-    response.render("register");
+    if(request.user) {
+        request.flash("error", "You are already logged in, you cannot register.");
+        return response.redirect("/streamers");
+    } else {   
+        response.render("register"); 
+    };
 });
 
 //Route to handle Sign Up logic
@@ -35,14 +40,21 @@ router.post("/register", (request, response) => {
 
 //Show the Login form
 router.get("/login", (request, response) => {
+    if(request.user) {
+        request.flash("error", "You are already logged in, you cannot login again.");
+        return response.redirect("/streamers");
+    } else {  
     response.render("login");
+    };
 });
 
 //Handeling Login logic (Middleware)
 //Checks your credentials and compares it to the login and #Hashed password
 router.post("/login", passport.authenticate("local", {
     successRedirect: "/streamers",
-    failureRedirect: "/login"
+    failureRedirect: "/login",
+    failureFlash: true,
+    successFlash: "You have been successfully logged in!"
 }), (request, response) => {
 });
 

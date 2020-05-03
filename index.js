@@ -31,9 +31,8 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
 
-const URL = process.env.DATABASE_URL;
 // mongoose.connect(process.env.DATABASEURL);
-mongoose.connect(URL);
+mongoose.connect(process.env.DATABASE_URL);
 
 //Check if We have our Database connected
 mongoose.connection.on("connected", function () {
@@ -56,11 +55,11 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 
 //Seeding our Database
-seedDB();
+// seedDB();
 
 //Passport Configuration
 app.use(require("express-session")({
-    secret: "*This can be any text to make secret work*",
+    secret: process.env.SECRET,
     resave: false,
     saveUninitialized: false
 }));

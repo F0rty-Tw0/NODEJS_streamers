@@ -49,8 +49,9 @@ router.post("/", middleware.isLoggedIn, (request, response) => {
 router.get("/:id", (request, response) => {
     //Find the Streamer with provided ID
     Streamer.findById(request.params.id).populate("comments").exec((error, foundStreamer) => {
-        if (error) {
-            console.log(error);
+        if (error || !foundStreamer) {
+            request.flash("error", "Influencer not found!");
+            response.redirect("/streamers");
         } else {
             //Render show the template with that Streamer
             response.render("streamers/show", { streamer: foundStreamer });

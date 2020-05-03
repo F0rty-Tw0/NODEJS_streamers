@@ -18,10 +18,10 @@ middlewareObject.checkStreamerOwnership = (request, response, next) => {
     //Check if User is logged in
     if (request.isAuthenticated()) {
         Streamer.findById(request.params.id, (error, foundStreamer) => {
-            if (error) {
+            if (error || !foundStreamer) {
                 //If not logged in - redirect
-                request.flash("error", "Streamer not found!");
-                response.redirect("back");
+                request.flash("error", "Influencer not found!");
+                response.redirect("/streamers");
             } else {
                 //Does User own the Streamer page
                 //Checking with mongoose method .equals
@@ -45,10 +45,10 @@ middlewareObject.checkCommentOwnership = (request, response, next) => {
     //Check if User is logged in
     if (request.isAuthenticated()) {
         Comment.findById(request.params.comment_id, (error, foundComment) => {
-            if (error) {
-                //If not logged in - redirect
+            if (error || !foundComment) {
+                //If comment id not found - redirect
                 request.flash("error", "Comment not found!");
-                response.redirect("back");
+                response.redirect("/streamers/" + request.params.id);
             } else {
                 //Does User own the Comment 
                 //Checking with mongoose method .equals

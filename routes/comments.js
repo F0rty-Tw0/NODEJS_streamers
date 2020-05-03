@@ -9,8 +9,9 @@ const express = require("express"),
 router.get("/new", middleware.isLoggedIn, (request, response) => {
     //Find Streamer by id
     Streamer.findById(request.params.id, (error, streamer) => {
-        if (error) {
-            console.log(error);
+        if (error || !streamer) {
+            request.flash("error", "Streamer not found!");
+            return response.redirect("/streamers");
         } else {
             response.render("comments/new", { streamer: streamer });
         };
@@ -29,7 +30,6 @@ router.post("/", middleware.isLoggedIn, (request, response) => {
             Comment.create(request.body.comment, (error, comment) => {
                 if (error) {
                     request.flash("error", "Something went wrong!")
-                    console.log(error);
                 } else {
                     //Add Username and ID to the Comment and saving it
                     comment.author.id = request.user._id;
@@ -40,7 +40,7 @@ router.post("/", middleware.isLoggedIn, (request, response) => {
                     streamer.save();
                     //Redirect to Streamer show page
                     request.flash("success", "Successfully added your comment.");
-                    response.redirect("/streamers/" + streamer._id);
+                    response.redirect("back");
                 };
             });
         };
@@ -49,12 +49,20 @@ router.post("/", middleware.isLoggedIn, (request, response) => {
 
 //Edit Comments Route
 router.get("/:comment_id/edit", middleware.checkCommentOwnership, (request, response) => {
-    Comment.findById(request.params.comment_id, (error, foundComment) => {
-        if (error) {
-            response.redirect("back");
-        } else {
-            response.render("comments/edit", { streamer_id: request.params.id, comment: foundComment });
+    //We check if streamer exists
+    Streamer.findById(request.params.id, (error, foundStreamer) => {
+        if (error || !foundStreamer) {
+            request.flash("error", "Influencer not found!");
+            return response.redirect("/streamers");
         };
+        //If it exists, we proceed with the comment
+        Comment.findById(request.params.comment_id, (error, foundComment) => {
+            if (error) {
+                response.redirect("back");
+            } else {
+                response.render("comments/edit", { streamer_id: request.params.id, comment: foundComment });
+            };
+        });
     });
 });
 
