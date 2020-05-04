@@ -40,7 +40,7 @@ router.post("/", middleware.isLoggedIn, (request, response) => {
                     streamer.save();
                     //Redirect to Streamer show page
                     request.flash("success", "Successfully added your comment.");
-                    response.redirect("back");
+                    response.redirect("/streamer/" + request.params.id );
                 };
             });
         };

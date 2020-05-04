@@ -38,6 +38,7 @@ router.post("/register", (request, response) => {
     });
 });
 
+var goingBack = ("");
 //Show the Login form
 router.get("/login", (request, response) => {
     if(request.user) {
@@ -45,17 +46,18 @@ router.get("/login", (request, response) => {
         return response.redirect("/streamers");
     } else {  
     response.render("login");
+    goingBack = request.header('Referrer');
     };
 });
 
 //Handeling Login logic (Middleware)
 //Checks your credentials and compares it to the login and #Hashed password
 router.post("/login", passport.authenticate("local", {
-    successRedirect: "/streamers",
     failureRedirect: "/login",
     failureFlash: true,
     successFlash: "You have been successfully logged in!"
 }), (request, response) => {
+    response.redirect(goingBack);
 });
 
 //Logout Route Logic
