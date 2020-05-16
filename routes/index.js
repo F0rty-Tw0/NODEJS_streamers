@@ -4,9 +4,11 @@ const express = require("express"),
     User = require("../models/user"),
     router = express.Router();
 
+var indexURL = ("");
 //Rendering Index page
 router.get("/", (request, response) => {
     response.render("index");
+    indexURL = request.protocol + '://' + request.get('host') + request.originalUrl;
 });
 
 //Auth Routes
@@ -57,7 +59,10 @@ router.post("/login", passport.authenticate("local", {
     failureFlash: true,
     successFlash: "You have been successfully logged in!"
 }), (request, response) => {
+    if (goingBack != indexURL + "register") {
     response.redirect(goingBack);
+    } else 
+    response.redirect("/streamers");
 });
 
 //Logout Route Logic

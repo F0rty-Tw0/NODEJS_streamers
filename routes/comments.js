@@ -24,7 +24,7 @@ router.post("/", middleware.isLoggedIn, (request, response) => {
     Streamer.findById(request.params.id, (error, streamer) => {
         if (error) {
             console.log(error);
-            response.redirect("/streamer");
+            response.redirect("/streamers");
         } else {
             //Create new Comment
             Comment.create(request.body.comment, (error, comment) => {
@@ -40,7 +40,7 @@ router.post("/", middleware.isLoggedIn, (request, response) => {
                     streamer.save();
                     //Redirect to Streamer show page
                     request.flash("success", "Successfully added your comment.");
-                    response.redirect("/streamer/" + request.params.id );
+                    response.redirect("/streamers/" + request.params.id );
                 };
             });
         };
