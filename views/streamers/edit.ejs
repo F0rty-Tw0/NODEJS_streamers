@@ -10,7 +10,7 @@
         <h1 style="text-align: center;">Edit: <%= streamer.name %></h1>
         <!-- The from for adding streamers -->
         <div style="width: 40%; margin: 30px auto;">
-            <form action="/streamers/<%= streamer._id %>?_method=PUT" method="POST">
+            <form action="/streamers/<%= streamer.slug %>?_method=PUT" method="POST">
                 <div class="form-group">
                     <input class="form-control" type="text" name="streamer[name]" value="<%= streamer.name %>">
                 </div>

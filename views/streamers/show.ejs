@@ -30,11 +30,11 @@
                         <em>Submitted By: <%= streamer.author.username %></em>
                     </p>
                     <% if(currentUser && streamer.author.id.equals(currentUser._id)){ %>
-                    <form class="deleteForm" action="/streamers/<%= streamer._id %>/?_method=DELETE" method="POST">
+                    <form class="deleteForm" action="/streamers/<%= streamer.slug %>/?_method=DELETE" method="POST">
                         <button class="btn btn-sm btn-danger float-right">Delete</button>
                     </form>
                     <a class="btn btn-warning btn-sm float-right editButton"
-                        href="/streamers/<%= streamer._id%>/edit">Edit</a>
+                        href="/streamers/<%= streamer.slug%>/edit">Edit</a>
                     <% } %>
                 </div>
             </div>
@@ -63,7 +63,7 @@
                         <% if(currentUser) { %>
                         <!--If the user is logged in, show the new comment form-->
                         <h4>Write your comment <i class="fas fa-pen"></i></h4>
-                        <form id="add-comment-form" action="/streamers/<%= streamer._id %>/comments" method="POST">
+                        <form id="add-comment-form" action="/streamers/<%= streamer.slug %>/comments" method="POST">
                             <div class="form-group">
                                 <input class="form-control" type="text" disabled value="<%= currentUser.username %>">
                             </div>
@@ -116,7 +116,7 @@
                             Edit</a>
                         <!--Delete comment button-->
                         <form id="delete-form"
-                            action="/streamers/<%= streamer._id %>/comments/<%= comment._id %>?_method=DELETE"
+                            action="/streamers/<%= streamer.slug %>/comments/<%= comment._id %>?_method=DELETE"
                             method="POST" style="display: inline;">
                             <button class="btn btn-xs btn-danger">Delete</button>
                         </form>
@@ -126,7 +126,7 @@
                                 <h4>Edit your comment <i class="fas fa-pen"></i>
                                 </h4>
                                 <form id="edit-comment-form<%= comment._id %>"
-                                    action="/streamers/<%= streamer._id %>/comments/<%= comment._id %>?_method=PUT"
+                                    action="/streamers/<%= streamer.slug %>/comments/<%= comment._id %>?_method=PUT"
                                     method="POST">
                                     <div class="form-group">
                                         <input class="form-control" type="text" disabled

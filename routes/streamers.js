@@ -84,9 +84,9 @@ router.post('/', middleware.isLoggedIn, (request, response) => {
 });
 
 //Showing the Streamer individually with more info
-router.get('/:id', (request, response) => {
+router.get('/:slug', (request, response) => {
 	//Find the Streamer with provided ID
-	Streamer.findById(request.params.id).populate('comments').exec((error, foundStreamer) => {
+	Streamer.findOne({ slug: request.params.slug }).populate('comments').exec((error, foundStreamer) => {
 		if (error || !foundStreamer) {
 			request.flash('error', 'Influencer not found!');
 			response.redirect('/streamers');
@@ -98,28 +98,41 @@ router.get('/:id', (request, response) => {
 });
 
 //Edit Streamer Route
-router.get('/:id/edit', middleware.checkStreamerOwnership, (request, response) => {
-	Streamer.findById(request.params.id, (error, foundStreamer) => {
+router.get('/:slug/edit', middleware.checkStreamerOwnership, (request, response) => {
+	Streamer.findOne({ slug: request.params.slug }, (error, foundStreamer) => {
+		if (error) {
+			console.log(error);
+		}
 		response.render('streamers/edit', { streamer: foundStreamer });
 	});
 });
 
 //Update Streamer Route
-router.put('/:id', middleware.checkStreamerOwnership, (request, response) => {
+router.put('/:slug', middleware.checkStreamerOwnership, (request, response) => {
 	//Find and update the correct Streamer
-	Streamer.findByIdAndUpdate(request.params.id, request.body.streamer, (error, updatedStreamer) => {
+	Streamer.findOne({ slug: request.params.slug }, (error, streamer) => {
 		if (error) {
 			response.redirect('/streamers');
 		} else {
-			//Redirect back to the Show Page
-			response.redirect('/streamers/' + request.params.id);
+			streamer.name = request.body.streamer.name;
+			streamer.description = request.body.streamer.description;
+			streamer.logo = request.body.streamer.logo;
+			streamer.save(function(error) {
+				if (error) {
+					console.log(error);
+					res.redirect('/streamers');
+				} else {
+					//Redirect back to the Show Page
+					response.redirect('/streamers/' + streamer.slug);
+				}
+			});
 		}
 	});
 });
 
 //Destroy Streamer Route
-router.delete('/:id', middleware.checkStreamerOwnership, (request, response, next) => {
-	Streamer.findById(request.params.id, (error, streamer) => {
+router.delete('/:slug', middleware.checkStreamerOwnership, (request, response, next) => {
+	Streamer.findOne({ slug: request.params.slug }, (error, streamer) => {
 		//Removing the comments associated with that Streamer
 		Comment.deleteMany(
 			{
@@ -141,5 +154,6 @@ router.delete('/:id', middleware.checkStreamerOwnership, (request, response, nex
 function escapeRegex(text) {
 	return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 }
+
 //We declare that we have to export router
 module.exports = router;

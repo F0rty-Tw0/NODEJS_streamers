@@ -17,7 +17,7 @@ middlewareObject.isLoggedIn = (request, response, next) => {
 middlewareObject.checkStreamerOwnership = (request, response, next) => {
     //Check if User is logged in
     if (request.isAuthenticated()) {
-        Streamer.findById(request.params.id, (error, foundStreamer) => {
+        Streamer.findOne({slug: request.params.slug}, (error, foundStreamer) => {
             if (error || !foundStreamer) {
                 //If not logged in - redirect
                 request.flash("error", "Influencer not found!");

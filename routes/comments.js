@@ -8,7 +8,7 @@ const express = require("express"),
 //Comments Routes
 router.get("/new", middleware.isLoggedIn, (request, response) => {
     //Find Streamer by id
-    Streamer.findById(request.params.id, (error, streamer) => {
+    Streamer.findOne({slug: request.params.slug}, (error, streamer) => {
         if (error || !streamer) {
             request.flash("error", "Streamer not found!");
             return response.redirect("/streamers");
@@ -21,7 +21,7 @@ router.get("/new", middleware.isLoggedIn, (request, response) => {
 //Comments POST Route
 router.post("/", middleware.isLoggedIn, (request, response) => {
     //Lookup for Streamer using ID
-    Streamer.findById(request.params.id, (error, streamer) => {
+    Streamer.findOne({slug: request.params.slug}, (error, streamer) => {
         if (error) {
             console.log(error);
             response.redirect("/streamers");
@@ -40,31 +40,31 @@ router.post("/", middleware.isLoggedIn, (request, response) => {
                     streamer.save();
                     //Redirect to Streamer show page
                     request.flash("success", "Successfully added your comment.");
-                    response.redirect("/streamers/" + request.params.id );
+                    response.redirect("/streamers/" + request.params.slug );
                 };
             });
         };
     });
 });
 
-//Edit Comments Route
-router.get("/:comment_id/edit", middleware.checkCommentOwnership, (request, response) => {
-    //We check if streamer exists
-    Streamer.findById(request.params.id, (error, foundStreamer) => {
-        if (error || !foundStreamer) {
-            request.flash("error", "Influencer not found!");
-            return response.redirect("/streamers");
-        };
-        //If it exists, we proceed with the comment
-        Comment.findById(request.params.comment_id, (error, foundComment) => {
-            if (error) {
-                response.redirect("back");
-            } else {
-                response.render("comments/edit", { streamer_id: request.params.id, comment: foundComment });
-            };
-        });
-    });
-});
+// //Edit Comments Route
+// router.get("/:comment_id/edit", middleware.checkCommentOwnership, (request, response) => {
+//     //We check if streamer exists
+//     Streamer.findById(request.params.id, (error, foundStreamer) => {
+//         if (error || !foundStreamer) {
+//             request.flash("error", "Influencer not found!");
+//             return response.redirect("/streamers");
+//         };
+//         //If it exists, we proceed with the comment
+//         Comment.findById(request.params.comment_id, (error, foundComment) => {
+//             if (error) {
+//                 response.redirect("back");
+//             } else {
+//                 response.render("comments/edit", { streamer_slug: request.params.slug, comment: foundComment });
+//             };
+//         });
+//     });
+// });
 
 //Update Comments Route
 router.put("/:comment_id", middleware.checkCommentOwnership, (request, response) => {
@@ -72,7 +72,8 @@ router.put("/:comment_id", middleware.checkCommentOwnership, (request, response)
         if (error) {
             response.redirect("back");
         } else {
-            response.redirect("/streamers/" + request.params.id);
+            request.flash("success", "Comment updated!");
+            response.redirect("/streamers/" + request.params.slug);
         };
     });
 });
@@ -85,7 +86,7 @@ router.delete("/:comment_id", middleware.checkCommentOwnership, (request, respon
             response.redirect("back");
         } else {
             request.flash("success", "Comment deleted!");
-            response.redirect("/streamers/" + request.params.id);
+            response.redirect("/streamers/" + request.params.slug);
         };
     });
 });

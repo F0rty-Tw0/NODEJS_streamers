@@ -79,8 +79,8 @@ app.use((request, response, next) => {
 
 //Using the routes files and shortening the route declaration "/link"
 app.use('/', authRoutes);
-app.use('/streamers/:id/comments', commentRoutes);
 app.use('/streamers', streamersRoutes);
+app.use('/streamers/:slug/comments', commentRoutes);
 
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
