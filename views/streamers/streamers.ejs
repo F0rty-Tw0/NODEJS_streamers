@@ -35,7 +35,7 @@
         <!-- Making an array of streamers based on name and image -->
         <% streamers.forEach((streamer) =>{ %>
         <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="img-thumbnail">
+            <div class="img-thumbnail mt-3 mb-3">
                 <img class="img-fluid" src="<%= streamer.logo %>">
                 <div class="caption">
                     <h4><%= streamer.name %></h4>
@@ -47,6 +47,55 @@
         </div>
         <% }); %>
     </div>
+
+    <!-- Pagination -->
+    <div class="row text-center ml-1">
+        <% if (pages && pages > 0) { %>
+        <ul class="pagination text-center">
+            <% if (current == 1) { %>
+            <li class="page-item disabled"><a class="page-link">First</a></li>
+            <% } else { %>
+            <li><a href="/streamers<%if(search){%>?search=<%=search%><%}%>" class="page-link">First</a></li>
+        <% } %>
+ 
+        <% if (current == 1) { %>
+        <li class="page-item disabled"><a class="page-link">«</a></li>
+            <% } else { %>
+            <li><a href="/streamers?page=<%= Number(current) - 1 %><%if(search){%>&search=<%=search%><%}%>" class="page-link">«</a></li>
+        <% } %>
+ 
+        <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
+        <% if (i !== 1) { %>
+        <li class="page-item"><a class="page-link">...</a></li>
+            <% } %>
+            <% for (; i <= (Number(current) + 4) && i <= pages; i++) { %>
+            <% if (i == current) { %>
+            <li class="page-item active"><a class="page-link"><%= i %></a></li>
+            <% } else { %>
+            <li><a href="/streamers?page=<%= i %><%if(search){%>&search=<%=search%><%}%>" class="page-link"><%= i %></a></li>
+        <% } %>
+        <% if (i == Number(current) + 4 && i < pages) { %>
+        <li class="page-item active"><a class="page-link">...</a></li>
+            <% } %>
+            <% } %>
+
+            <% if (current == pages) { %>
+            <li class="page-item disabled"><a class="page-link">»</a></li>
+            <% } else { %>
+            <li><a href="/streamers?page=<%= Number(current) + 1 %><%if(search){%>&search=<%=search%><%}%>" class="page-link">»</a></li>
+        <% } %>
+ 
+        <% if (current == pages) { %>
+        <li class="page-item disabled"><a class="page-link">Last</a></li>
+            <% } else { %>
+            <li><a href="/streamers?page=<%= pages %><%if(search){%>&search=<%=search%><%}%>" class="page-link">Last</a></li>
+        <% } %>
+    </ul>
+    <% } %>
 </div>
+
+</div>
+
+
 <!-- Including the Footer-->
 <%- include("../partials/footer") %>

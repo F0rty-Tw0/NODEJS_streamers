@@ -7,30 +7,51 @@ const express = require('express'),
 
 //Rendering Streamers page
 router.get('/', (request, response) => {
+	var perPage = 8;
+	var pageQuery = parseInt(request.query.page);
+	var pageNumber = pageQuery ? pageQuery : 1;
 	if (request.query.search) {
 		const regex = new RegExp(escapeRegex(request.query.search), 'gi');
 		//Getting all the streamers from Database
-		Streamer.find({ name: regex }, (error, allStreamers) => {
-			if (error) {
-				console.log(error);
-			} else {
-				if (allStreamers.length < 1) {
-					request.flash('error', 'No streamer found from your search');
-					return response.redirect('/streamers');
-				}
-				//Renders all the streamers and also contains the information of currently loged user
-				response.render('streamers/streamers', { streamers: allStreamers });
-			}
-		});
+		Streamer.find({ name: regex })
+			.skip(perPage * pageNumber - perPage)
+			.limit(perPage)
+			.exec((error, allStreamers) => {
+				Streamer.countDocuments({ name: regex }).exec((error, count) => {
+					if (error) {
+						console.log(error);
+						response.redirect('/streamers');
+					} else {
+						if (allStreamers.length < 1) {
+							request.flash('error', 'No streamer found from your search');
+							return response.redirect('/streamers');
+						}
+						//Renders all the streamers and also contains the information of currently loged user
+						response.render('streamers/streamers', {
+							streamers: allStreamers,
+							current: pageNumber,
+							pages: Math.ceil(count / perPage),
+							search: request.query.search
+						});
+					}
+				});
+			});
 	} else {
 		//Getting all the streamers from Database
-		Streamer.find({}, (error, allStreamers) => {
-			if (error) {
-				console.log(error);
-			} else {
-				//Renders all the streamers and also contains the information of currently loged user
-				response.render('streamers/streamers', { streamers: allStreamers });
-			}
+		Streamer.find({}).skip(perPage * pageNumber - perPage).limit(perPage).exec((error, allStreamers) => {
+			Streamer.countDocuments().exec((error, count) => {
+				if (error) {
+					console.log(error);
+				} else {
+					//Renders all the streamers and also contains the information of currently loged user
+					response.render('streamers/streamers', {
+						streamers: allStreamers,
+						current: pageNumber,
+						pages: Math.ceil(count / perPage),
+						search: false
+					});
+				}
+			});
 		});
 	}
 });
